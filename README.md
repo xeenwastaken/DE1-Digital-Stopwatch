@@ -8,7 +8,7 @@ Cílem tohoto projektu je návrh a implementace digitálních stopek s funkcí m
 
 ## 3. Git Flow
 Odkaz na historii commitů, která prokazuje spolupráci členů týmu:
-[Commit History](link_na_vas_github_commits)
+[Commit History](https://github.com/xeenwastaken/DE1-Digital-Stopwatch/commits/main/)
 * **Student A:** (Žalud Jakub ) - Zodpovědný za readme.md 
 * **Student B:** (Martinec Robert) - Zodpovědný za ???
   
