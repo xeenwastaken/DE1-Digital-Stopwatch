@@ -33,10 +33,9 @@ Kompletní projektový adresář Vivado 2025.2 bude součástí tohoto repozitá
 * **Video:** [TBD]
 * **Poster:** [Link na A3 poster v PDF - TBD]
 * **Zdroje:** Přednášky a cvičení BPC-DE1, manuál k Nexys A7.
+## 8. Architektura (WIP)
 
-ARCHITEKTURA
-2. Interní propojovací signály (Architecture - signal)
-Toto jsou tvé "dráty" na nepájivém poli, kterými budeš uvnitř Top modulu propojovat jednotlivé podmoduly (clock_en, debounce, button_decoder, counter, display_driver).
+Podmoduly (clock_en, debounce, button_decoder, counter, display_driver).
 
 Hodinové pulzy (z modulu clock_en):
 | Název signálu | Datový typ | Zdroj (Výstup z) | Cíl (Vstup do) | Popis |
