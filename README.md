@@ -61,3 +61,15 @@ Datová sběrnice (z modulu counter do display_driver):
 | Název signálu | Datový typ | Zdroj | Cíl | Popis |
 | :--- | :--- | :--- | :--- | :--- |
 | sig_bcd_data | std_logic_vector(31 downto 0) | counter | display_driver | Data k zobrazení. 8 znaků displeje × 4 bity (BCD formát pro každé číslo = 32 bitů). |
+
+## Ovládání stopek (Nexys A7-50T)
+
+| Tlačítko | Akce | Funkce |
+|:---:|:---:|:---|
+| **BTNC** (Center) | Stisk | **START / STOP** (Spuštění nebo zastavení času) |
+| **BTNC** (Center) | Podržení | **COMPLETE RESET** (Celkové vynulování systému) |
+| **BTNR** (Right) | Stisk | **SAVE LAP** (Zaznamenání aktuálního mezičasu) |
+| **BTNL** (Left) | Stisk | **DELETE LAP** (Smazání aktuálně zobrazeného mezičasu) |
+| **BTNL** (Left) | Podržení | **CLEAR ALL** (Vymazání celé paměti mezičasů) |
+| **BTNU** (Up) | Stisk | **NEXT LAP** (Listování v paměti směrem nahoru) |
+| **BTND** (Down) | Stisk | **PREV LAP** (Listování v paměti směrem dolů) |
