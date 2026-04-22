@@ -4,7 +4,7 @@
 Cílem tohoto projektu je návrh a implementace digitálních stopek s funkcí mezičasu (Lap) na FPGA desce Nexys A7. Stopky jsou schopny měřit čas s přesností na setiny sekundy. Zobrazování probíhá na 8místném 7segmentovém displeji pomocí multiplexování. Zařízení se ovládá pomocí fyzických tlačítek (Start/Stop, Lap, Reset), která jsou ošetřena proti mechanickým zákmitům (debouncing).
 
 ## 2. Block Diagram
-![stopwatch_design]([SCHEMAWIP.jpg)
+![stopwatch_design](main/SCHEMAWIP.jpg)
 
 ## 3. Git Flow
 Odkaz na historii commitů, která prokazuje spolupráci členů týmu:
