@@ -1,75 +1,84 @@
 # Projekt: Digital Stopwatch (Lap) - Dig. Elektronika 1
 
 ## 1. Problem Description
-Cílem tohoto projektu je návrh a implementace digitálních stopek s funkcí mezičasu (Lap) na FPGA desce Nexys A7. Stopky jsou schopny měřit čas s přesností na setiny sekundy. Zobrazování probíhá na 8místném 7segmentovém displeji pomocí multiplexování. Zařízení se ovládá pomocí fyzických tlačítek (Start/Stop, Lap, Reset), která jsou ošetřena proti mechanickým zákmitům (debouncing).
+Cílem tohoto projektu je návrh a implementace digitálních stopek s pokročilou funkcí ukládání a správy mezičasů (Lap) na FPGA desce Nexys A7-50T. Stopky jsou schopny měřit čas s přesností na setiny sekundy. Zobrazování probíhá na 8místném 7segmentovém displeji pomocí multiplexování. Zařízení se plně ovládá pomocí pěti fyzických tlačítek (křížový ovladač), jejichž signály jsou hardwarově ošetřeny proti mechanickým zákmitům (debouncing) a dekódovány pro rozeznání krátkého a dlouhého stisku.
 
-## 2. Block Diagram - In progress (optimalizace přehlednosti!)
-![stopwatch_design](top_design_WIP.jpg)
+## 2. Ovládání stopek (Hardware Interface)
+Systém využívá pět tlačítek na desce Nexys A7. Následující tabulka popisuje jejich funkce:
 
-## 3. Git Flow
-Odkaz na historii commitů, která prokazuje spolupráci členů týmu:
+| Tlačítko | Akce | Funkce |
+| :---: | :---: | :--- |
+| **BTNC** (Center) | Stisk | **START / STOP** (Spuštění nebo pozastavení času) |
+| **BTNC** (Center) | Podržení | **COMPLETE RESET** (Celkové vynulování systému a paměti) |
+| **BTNR** (Right) | Stisk | **SAVE LAP** (Zaznamenání aktuálního mezičasu do paměti) |
+| **BTNL** (Left) | Stisk | **DELETE LAP** (Smazání aktuálně zobrazeného mezičasu) |
+| **BTNL** (Left) | Podržení | **CLEAR ALL** (Vymazání celé paměti mezičasů) |
+| **BTNU** (Up) | Stisk | **NEXT LAP** (Listování v paměti směrem k novějším) |
+| **BTND** (Down) | Stisk | **PREV LAP** (Listování v paměti směrem ke starším) |
+
+## 3. System Architecture & Block Diagram
+Návrh je striktně modulární. Celý systém je rozdělen do specializovaných bloků (VHDL entit), které spolu komunikují přes definované sběrnice a řídicí signály.
+
+![Top Level Design](top_design_WIP.jpg)
+
+### Přehled jednotlivých modulů
+| Název modulu | Typ | Hlavní funkce a popis |
+| :--- | :--- | :--- |
+| **CLK_EN** | Generátor pulzů | Dělí hlavní 100MHz hodiny desky. Vytváří povolovací signály (Clock Enable) s frekvencí `100 Hz` (pro čítání času) a `1 kHz` (pro multiplexování displeje a vzorkování tlačítek). |
+| **DEBOUNCER** | Vstupní filtr | 5 instancí pro každé tlačítko. Odstraňuje mechanické zákmity a generuje "čistý" stav (`btn_state`) a detekci stisku na jednu hranu hodin (`btn_press`). |
+| **BUTTON_DECODER** | Časovač stisku | 2 instance (pro BTNC a BTNL). Měří délku stisku vyčištěného tlačítka a rozlišuje krátký stisk (Tick) a dlouhé podržení (Hold). |
+| **COUNTER** | Čítač času | Jádro stopek. Počítá setiny sekundy na základě 100Hz pulzu. Odesílá neustále běžící čas (32-bit BCD) do správce paměti. |
+| **LAP_MANAGER** | Správa paměti | "Mozek" stopek. Obsahuje pole (RAM) pro uložení mezičasů. Zpracovává příkazy tlačítek a rozhoduje, zda se na displej pošle aktuální živý čas, nebo vyvolaný mezičas z paměti. |
+| **DISPLAY_DRIVER** | Budič periferie | Stará se o multiplexování 8místného 7segmentového displeje. Obsahuje vnitřní převodník `BIN2SEG` pro překlad BCD dat na segmenty. |
+
+## 4. Internal Signals (Propojovací sběrnice)
+Propojení modulů (tzv. "dráty" v Top-Level VHDL souboru) je realizováno pomocí následujících signálů:
+
+**Povolovací signály (Clock Enables):**
+| Název signálu | Typ | Zdroj | Cíl | Popis |
+| :--- | :--- | :--- | :--- | :--- |
+| `sig_ce_100hz` | `std_logic` | `CLK_EN` | `COUNTER` | Pulz každou setinu sekundy. Řídí rychlost čítání stopek. |
+| `sig_ce_1khz` | `std_logic` | `CLK_EN` | Ostatní moduly | Řídí rychlost debouncingu, měření délky stisku a obnovovací frekvenci displeje. |
+
+**Řídicí pulzy a stavy tlačítek:**
+| Název signálu | Typ | Zdroj | Cíl | Popis |
+| :--- | :--- | :--- | :--- | :--- |
+| `sig_start_stop` | `std_logic` | `DECODER_BTNC` | `COUNTER`, `LAP_MANAGER` | Přepíná běh stopek / vrací displej z prohlížení do živého času. |
+| `sig_complete_reset` | `std_logic` | `DECODER_BTNC` | Všechny paměťové bloky | Tvrdý reset - vynuluje čas i celou paměť (Hold BTNC). |
+| `sig_save_lap` | `std_logic` | `DEBOUNCER_BTNR` | `LAP_MANAGER` | Uloží aktuální běžící čas do volného slotu v paměti. |
+| `sig_next_lap` | `std_logic` | `DEBOUNCER_BTNU` | `LAP_MANAGER` | Posun ukazatele paměti vpřed. |
+| `sig_prev_lap` | `std_logic` | `DEBOUNCER_BTND` | `LAP_MANAGER` | Posun ukazatele paměti vzad. |
+| `sig_delete_lap` | `std_logic` | `DECODER_BTNL` | `LAP_MANAGER` | Smaže právě prohlížený mezičas a posune ostatní záznamy. |
+| `sig_clear_all` | `std_logic` | `DECODER_BTNL` | `LAP_MANAGER` | Vymaže paměť mezičasů, ale stopky nechá běžet (Hold BTNL). |
+
+**Datové sběrnice:**
+| Název signálu | Typ | Zdroj | Cíl | Popis |
+| :--- | :--- | :--- | :--- | :--- |
+| `sig_running_time` | `vector(31:0)` | `COUNTER` | `LAP_MANAGER` | 32bitový BCD vektor představující aktuální živý čas. |
+| `sig_display_data` | `vector(31:0)` | `LAP_MANAGER` | `DISPLAY_DRIVER` | Data odesílaná k zobrazení (buď `sig_running_time` nebo čas z paměti). |
+
+## 5. Git Flow & Team
+Odkaz na historii commitů, která prokazuje kooperativní vývoj:
 [Commit History](https://github.com/xeenwastaken/DE1-Digital-Stopwatch/commits/main/)
-* **Student A:** (Žalud Jakub) - Zodpovědný za readme.md 
-* **Student B:** (Martinec Robert) - 
-  
-## 4. Simulations
-*(Zde screenshoty z Vivada - Waveforms)*
-* **Obrázek 1:** Testbench modulu Debouncer.
-* **Obrázek 2:** Testbench modulu Counter (ukázka přetečení a uložení mezičasu).
+* **Student A:** (Žalud Jakub) - Architektura, Top-Level design, LAP_MANAGER, README dokumentace.
+* **Student B:** (Martinec Robert) - Implementace čítačů, budiče displeje, testování na hardwaru.
 
-## 5. Resource Report
-Po úspěšné syntéze ve Vivado 2025.2 byly využity následující zdroje na čipu Artix-7:
+## 6. Simulations & Testbenches
+*(Zde budou přidány screenshoty z Vivada - Waveforms)*
+* **Obrázek 1:** Testbench modulu `LAP_MANAGER` (ukázka uložení a čtení z paměti).
+* **Obrázek 2:** Testbench modulu `BUTTON_DECODER` (rozlišení krátkého a dlouhého stisku).
+
+## 7. Resource Report (Post-Synthesis)
+*(Bude doplněno po finální syntéze ve Vivado 2025.2 pro čip Artix-7 xc7a50ticsg324-1L)*
 
 | Resource | Utilization | Available | Utilization % |
 | :--- | :--- | :--- | :--- |
-| LUT | *(doplnit)* | 63400 | *(doplnit) %* |
-| FF | *(doplnit)* | 126800 | *(doplnit) %* |
-| IO | *(doplnit)* | 210 | *(doplnit) %* |
+| LUT | *TBD* | 32600 | *TBD* % |
+| FF | *TBD* | 65200 | *TBD* % |
+| IO | *TBD* | 210 | *TBD* % |
+| BRAM | *TBD* | 75 | *TBD* % |
 
-## 6. Vivado Project
-Kompletní projektový adresář Vivado 2025.2 bude součástí tohoto repozitáře.
-
-## 7. Other Outputs
-* **Video:** [TBD]
-* **Poster:** [Link na A3 poster v PDF - TBD]
-* **Zdroje:** Přednášky a cvičení BPC-DE1, manuál k Nexys A7.
-## 8. Architektura (WIP)
-
-Podmoduly (clock_en, debounce, button_decoder, counter, display_driver).
-
-Hodinové pulzy (z modulu clock_en):
-| Název signálu | Datový typ | Zdroj (Výstup z) | Cíl (Vstup do) | Popis |
-| :--- | :--- | :--- | :--- | :--- |
-| sig_ce_100hz | std_logic | clock_en | debounce, button_decoder, counter | Pulz každou setinu sekundy. Řídí čítání stopek a čtení tlačítek. |
-| sig_ce_1khz | std_logic | clock_en | display_driver | Pulz pro rychlé přepínání (multiplexování) znaků displeje. |
-
-Vyčištěná tlačítka (z modulů debounce):
-| Název signálu | Datový typ | Zdroj | Cíl | Popis |
-| :--- | :--- | :--- | :--- | :--- |
-| sig_btn_start_clean| std_logic | debounce (inst. 1) | edge_detector nebo counter | Vyčištěný signál start/stop tlačítka. |
-| sig_btn_lap_clean | std_logic | debounce (inst. 2) | button_decoder | Vyčištěný signál lap/reset tlačítka. |
-
-Řídící pulzy pro stopky (z modulu button_decoder a detekce hran):
-Poznámka: Abys mohl stopky spustit a zastavit jedním tlačítkem, obvykle se hodí vygenerovat jen krátký pulz (1 hodinový takt) při stisku (tzv. edge detector).
-| Název signálu | Datový typ | Zdroj | Cíl | Popis |
-| :--- | :--- | :--- | :--- | :--- |
-| sig_toggle_tick | std_logic | Detektor hrany | counter | Krátký pulz, který přepne vnitřní stav stopek (běží/stojí). |
-| sig_lap_tick | std_logic | button_decoder | counter | Krátký pulz detekující krátký stisk -> uložení mezičasu. |
-| sig_reset_tick | std_logic | button_decoder | counter | Krátký pulz detekující dlouhý stisk -> vynulování stopek. |
-
-Datová sběrnice (z modulu counter do display_driver):
-| Název signálu | Datový typ | Zdroj | Cíl | Popis |
-| :--- | :--- | :--- | :--- | :--- |
-| sig_bcd_data | std_logic_vector(31 downto 0) | counter | display_driver | Data k zobrazení. 8 znaků displeje × 4 bity (BCD formát pro každé číslo = 32 bitů). |
-
-## Ovládání stopek (Nexys A7-50T)
-
-| Tlačítko | Akce | Funkce |
-|:---:|:---:|:---|
-| **BTNC** (Center) | Stisk | **START / STOP** (Spuštění nebo zastavení času) |
-| **BTNC** (Center) | Podržení | **COMPLETE RESET** (Celkové vynulování systému) |
-| **BTNR** (Right) | Stisk | **SAVE LAP** (Zaznamenání aktuálního mezičasu) |
-| **BTNL** (Left) | Stisk | **DELETE LAP** (Smazání aktuálně zobrazeného mezičasu) |
-| **BTNL** (Left) | Podržení | **CLEAR ALL** (Vymazání celé paměti mezičasů) |
-| **BTNU** (Up) | Stisk | **NEXT LAP** (Listování v paměti směrem nahoru) |
-| **BTND** (Down) | Stisk | **PREV LAP** (Listování v paměti směrem dolů) |
+## 8. Other Outputs
+* **Video Demonstration:** [TBD - Link na YouTube]
+* **Project Poster:** [TBD - Link na PDF]
+* **Zdroje:** Přednášky a cvičení BPC-DE1 (VUT FEKT), referenční manuál k desce Nexys A7.
