@@ -46,13 +46,12 @@ begin
 end if;
 
    elsif btn_in = '0' and btn_prev = '1' then
-    if is_held = '0' then
-        tick_out <= '1';
-        end if;
+     if is_held = '0' then
+           tick_out <= '1';
+      end if;
      end if;
+    end if;
    end if;
-   end if;
-   end process;
+end process;
    
-
 end Behavioral;
