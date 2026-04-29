@@ -19,7 +19,7 @@ Systém využívá pět tlačítek na desce Nexys A7. Následující tabulka pop
 ## 3. System Architecture & Block Diagram
 Návrh je striktně modulární. Celý systém je rozdělen do specializovaných bloků (VHDL entit), které spolu komunikují přes definované sběrnice a řídicí signály.
 
-![Top Level Design](TOP_DESIGN.jpg)
+![Top Level Design](stopwatch_top_design.jpg)
 
 ### Přehled jednotlivých modulů
 | Název modulu | Typ | Hlavní funkce a popis |
