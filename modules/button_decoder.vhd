@@ -50,7 +50,7 @@ begin
         end if;
      end if;
    end if;
-   end if;     -- doplneny end if pro rising_edge(clk)
+   end if;     
    end process;
    
 
