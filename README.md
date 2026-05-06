@@ -72,7 +72,7 @@ Detailní pohled na synchronizaci hlavního čítače s povolením hodin (`ce_10
 | :--- | :--- | :--- |
 | **COUNTER** | `tb_counter.vhd` | Přičítání hodnot v BCD formátu (0, 1, 2...) synchronizované s 100Hz pulzem. |
 
-![BCD Counter Waveform](tb_counter.png)
+![BCD Counter Waveform](testbench/obrazky/tb_counter.png)
 
 ---
 
@@ -82,7 +82,7 @@ Ověření kombinační logiky převodníku. Simulace ukazuje správné namapov�
 | :--- | :--- | :--- |
 | **BIN2SEG** | `tb_bin2seg.vhd` | Sekvenční testování vstupních hodnot 0–9 a kontrola výstupního vektoru `seg[6:0]`. |
 
-![Bin2Seg Waveform](tb_bin2seg.png)
+![Bin2Seg Waveform](testbench/obrazky/tb_bin2seg.png)
 
 ---
 
@@ -92,7 +92,7 @@ Simulace ošetření tlačítek. Je zde vidět filtrace zákmitů a následné r
 | :--- | :--- | :--- |
 | **BUTTON_DECODER** | `tb_button decoder.vhd` | Detekce délky stisku; `hold_out` se aktivuje po definovaném počtu vzorků. |
 
-![Button Decoder Waveform](tb_buttondecoder.png)
+![Button Decoder Waveform](testbench/obrazky/tb_buttondecoder.png)
 
 ---
 
@@ -102,7 +102,7 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 | :--- | :--- | :--- |
 | **LAP_MANAGER** | `tb_lap manager.vhd` | Práce s indexy paměti a přepínání mezi živým časem a uloženým mezičasem na výstupu. |
 
-![Lap Manager Waveform](tb_lap_manager.png)
+![Lap Manager Waveform](testbench/obrazky/tb_lap_manager.png)
 
 ## 7. Resource Report (Post-Synthesis)
 *(Bude doplněno po finální syntéze ve Vivado 2025.2 pro čip Artix-7 xc7a50ticsg324-1L)*
