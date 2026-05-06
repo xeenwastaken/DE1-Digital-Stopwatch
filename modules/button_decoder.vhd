@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- autor: Jakub Žalud // Zdroje: github.com/tomas-fryza/vhdl-examples
+
 entity button_decoder is
 generic (
 G_HOLD_TIME : integer := 1250
