@@ -1,6 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+--Autor: Robert Martinec a Jakub Žalud
+
 entity stopwatch_top is
     generic (
         G_MAX_100HZ : integer := 1000000;  
