@@ -1,6 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+-- autoři: Jakub Žalud a Robert Martinec // Zdroje: Cvičení DE1 - github.com/tomas-fryza/vhdl-examples
+
 entity debounce is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
