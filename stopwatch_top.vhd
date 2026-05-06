@@ -22,7 +22,7 @@ entity stopwatch_top is
     );
 end entity stopwatch_top;
 
-
+-- Při práci na stopwatch_top byla využito GEMINI pro pomoc se strukturou. --
 
 architecture Behavioral of stopwatch_top is
 
