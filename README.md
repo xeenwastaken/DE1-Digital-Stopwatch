@@ -63,10 +63,46 @@ Odkaz na historii commitů, která prokazuje kooperativní vývoj:
 * **Student A:** (Žalud Jakub) - Architektura, Top-Level design, LAP_MANAGER, README dokumentace.
 * **Student B:** (Martinec Robert) - Implementace čítačů, budiče displeje, testování na hardwaru.
 
-## 6. Simulations & Testbenches
-*(Zde budou přidány screenshoty z Vivada - Waveforms)*
-* **Obrázek 1:** Testbench modulu `LAP_MANAGER` (ukázka uložení a čtení z paměti).
-* **Obrázek 2:** Testbench modulu `BUTTON_DECODER` (rozlišení krátkého a dlouhého stisku).
+## 6. Simulation & Verification (Waveforms)
+Pro ověření správné funkce všech modulů byly vytvořeny testbenche a provedeny behaviorální simulace v prostředí Vivado. Následující průběhy potvrzují logickou správnost návrhu.
+
+### 6.1 BCD Counter & Clock Enable
+Detailní pohled na synchronizaci hlavního čítače s povolením hodin (`ce_100hz`). Je patrné, že data se mění přesně s náběžnou hranou signálu CE, což zajišťuje stabilitu systému.
+| Modul | Soubor simulace | Popis |
+| :--- | :--- | :--- |
+| **COUNTER** | `tb_counter.png` | Přičítání hodnot v BCD formátu (0, 1, 2...) synchronizované s 100Hz pulzem. |
+
+![BCD Counter Waveform](tb_counter.png)
+
+---
+
+### 6.2 7-segment Decoder (Bin2Seg)
+Ověření kombinační logiky převodníku. Simulace ukazuje správné namapování číselných hodnot 0 až 9 na odpovídající segmenty displeje (aktivní v logické nule).
+| Modul | Soubor simulace | Popis |
+| :--- | :--- | :--- |
+| **BIN2SEG** | `tb_bin2seg.png` | Sekvenční testování vstupních hodnot 0–9 a kontrola výstupního vektoru `seg[6:0]`. |
+
+![Bin2Seg Waveform](tb_bin2seg.png)
+
+---
+
+### 6.3 Button Management (Debounce & Decoder)
+Simulace ošetření tlačítek. Je zde vidět filtrace zákmitů a následné rozlišení mezi krátkým impulzem (`tick_out`) a logikou pro dlouhé podržení (`hold_out`).
+| Modul | Soubor simulace | Popis |
+| :--- | :--- | :--- |
+| **BUTTON_DECODER** | `tb_buttondecoder.png` | Detekce délky stisku; `hold_out` se aktivuje po definovaném počtu vzorků. |
+
+![Button Decoder Waveform](tb_buttondecoder.png)
+
+---
+
+### 6.4 Lap Manager & Memory Logic
+Komplexní test správy mezičasů. Simulace zachycuje uložení času do paměti (`save_lap_tick`), inkrementaci počtu uložených záznamů a změnu stavu indikačních LED.
+| Modul | Soubor simulace | Popis |
+| :--- | :--- | :--- |
+| **LAP_MANAGER** | `tb_lap_manager.png` | Práce s indexy paměti a přepínání mezi živým časem a uloženým mezičasem na výstupu. |
+
+![Lap Manager Waveform](tb_lap_manager.png)
 
 ## 7. Resource Report (Post-Synthesis)
 *(Bude doplněno po finální syntéze ve Vivado 2025.2 pro čip Artix-7 xc7a50ticsg324-1L)*
