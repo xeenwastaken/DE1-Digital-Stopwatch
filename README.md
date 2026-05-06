@@ -70,7 +70,7 @@ Pro ověření správné funkce všech modulů byly vytvořeny testbenche a prov
 Detailní pohled na synchronizaci hlavního čítače s povolením hodin (`ce_100hz`). Je patrné, že data se mění přesně s náběžnou hranou signálu CE, což zajišťuje stabilitu systému.
 | Modul | Soubor simulace | Popis |
 | :--- | :--- | :--- |
-| **COUNTER** | `tb_counter.png` | Přičítání hodnot v BCD formátu (0, 1, 2...) synchronizované s 100Hz pulzem. |
+| **COUNTER** | `tb_counter.vhd` | Přičítání hodnot v BCD formátu (0, 1, 2...) synchronizované s 100Hz pulzem. |
 
 ![BCD Counter Waveform](tb_counter.png)
 
@@ -80,7 +80,7 @@ Detailní pohled na synchronizaci hlavního čítače s povolením hodin (`ce_10
 Ověření kombinační logiky převodníku. Simulace ukazuje správné namapování číselných hodnot 0 až 9 na odpovídající segmenty displeje (aktivní v logické nule).
 | Modul | Soubor simulace | Popis |
 | :--- | :--- | :--- |
-| **BIN2SEG** | `tb_bin2seg.png` | Sekvenční testování vstupních hodnot 0–9 a kontrola výstupního vektoru `seg[6:0]`. |
+| **BIN2SEG** | `tb_bin2seg.vhd` | Sekvenční testování vstupních hodnot 0–9 a kontrola výstupního vektoru `seg[6:0]`. |
 
 ![Bin2Seg Waveform](tb_bin2seg.png)
 
@@ -90,7 +90,7 @@ Ověření kombinační logiky převodníku. Simulace ukazuje správné namapov�
 Simulace ošetření tlačítek. Je zde vidět filtrace zákmitů a následné rozlišení mezi krátkým impulzem (`tick_out`) a logikou pro dlouhé podržení (`hold_out`).
 | Modul | Soubor simulace | Popis |
 | :--- | :--- | :--- |
-| **BUTTON_DECODER** | `tb_buttondecoder.png` | Detekce délky stisku; `hold_out` se aktivuje po definovaném počtu vzorků. |
+| **BUTTON_DECODER** | `tb_button decoder.vhd` | Detekce délky stisku; `hold_out` se aktivuje po definovaném počtu vzorků. |
 
 ![Button Decoder Waveform](tb_buttondecoder.png)
 
@@ -100,7 +100,7 @@ Simulace ošetření tlačítek. Je zde vidět filtrace zákmitů a následné r
 Komplexní test správy mezičasů. Simulace zachycuje uložení času do paměti (`save_lap_tick`), inkrementaci počtu uložených záznamů a změnu stavu indikačních LED.
 | Modul | Soubor simulace | Popis |
 | :--- | :--- | :--- |
-| **LAP_MANAGER** | `tb_lap_manager.png` | Práce s indexy paměti a přepínání mezi živým časem a uloženým mezičasem na výstupu. |
+| **LAP_MANAGER** | `tb_lap manager.vhd` | Práce s indexy paměti a přepínání mezi živým časem a uloženým mezičasem na výstupu. |
 
 ![Lap Manager Waveform](tb_lap_manager.png)
 
