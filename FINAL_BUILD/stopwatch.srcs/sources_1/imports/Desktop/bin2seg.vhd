@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-
+-- autor: Jakub Žalud // Zdroje: Cvičení DE1 - github.com/tomas-fryza/vhdl-examples
 
 entity bin2seg is
     Port ( bin : in STD_LOGIC_vector(3 downto 0);
