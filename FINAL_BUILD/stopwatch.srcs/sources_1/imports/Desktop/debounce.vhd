@@ -1,19 +1,12 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+-- autoři: Jakub Žalud a Robert Martinec // Zdroje: Cvičení DE1 - github.com/tomas-fryza/vhdl-examples
 
 entity debounce is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
-           ce  : in STD_LOGIC;       -- vzorkovaci puls (typicky 1 kHz z clk_en)
+           ce  : in STD_LOGIC;       
            btn_in : in STD_LOGIC;
            btn_state : out STD_LOGIC;
            btn_press : out STD_LOGIC;
@@ -21,14 +14,9 @@ entity debounce is
 end debounce;
 
 architecture Behavioral of debounce is
-    ----------------------------------------------------------------
-    -- Constants
-    ----------------------------------------------------------------
-    constant C_SHIFT_LEN : positive := 4;  -- Debounce history
+   
+    constant C_SHIFT_LEN : positive := 4;  
 
-    ----------------------------------------------------------------
-    -- Internal signals
-    ----------------------------------------------------------------
     signal sync0     : std_logic;
     signal sync1     : std_logic;
     signal shift_reg : std_logic_vector(C_SHIFT_LEN-1 downto 0);
@@ -36,9 +24,7 @@ architecture Behavioral of debounce is
     signal delayed   : std_logic;
 
 begin
-    ----------------------------------------------------------------
-    -- Synchronizer + debounce
-    ----------------------------------------------------------------
+    
     p_debounce : process(clk)
     begin
         if rising_edge(clk) then
@@ -50,38 +36,30 @@ begin
                 delayed   <= '0';
 
             else
-                -- Input synchronizer
+               
                 sync1 <= sync0;
                 sync0 <= btn_in;
 
-                -- Sample only when enable pulse occurs
+                
                 if ce = '1' then
+                  shift_reg <= shift_reg(C_SHIFT_LEN-2 downto 0) & sync1;
 
-                    -- Shift values to the left and load a new sample as LSB
-                    shift_reg <= shift_reg(C_SHIFT_LEN-2 downto 0) & sync1;
-
-                    -- Check if all bits are '1'
-                    if shift_reg = (shift_reg'range => '1') then
+                if shift_reg = (shift_reg'range => '1') then
                         debounced <= '1';
-                    -- Check if all bits are '0'
-                    elsif shift_reg = (shift_reg'range => '0') then
+            
+                elsif shift_reg = (shift_reg'range => '0') then
                         debounced <= '0';
-                    end if;
-
                 end if;
 
-                -- One clock delayed output for edge detector
+            end if;
+
                 delayed <= debounced;
             end if;
         end if;
     end process;
 
-    ----------------------------------------------------------------
-    -- Outputs
-    ----------------------------------------------------------------
     btn_state <= debounced;
 
-    -- One-clock pulse when button pressed / released
     btn_press   <= debounced and not(delayed);
     btn_release <= not(debounced) and delayed;
 
