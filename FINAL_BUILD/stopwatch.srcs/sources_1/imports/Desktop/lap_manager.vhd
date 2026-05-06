@@ -2,6 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+--Autor: Robert Martinec a Jakub Žalud
+
 entity lap_manager is
     generic (
         G_LAP_DEPTH : integer := 10 
@@ -21,7 +23,8 @@ entity lap_manager is
     );
 end entity lap_manager;
 
-
+-- Pro sestavení architektury lap_manager bylo k inspiraci využito GEMINI a CLAUDE(Opus 4.7 Adaptive). -- 
+    
 architecture Behavioral of lap_manager is
 
     type t_lap_mem is array (0 to G_LAP_DEPTH - 1) of std_logic_vector(23 downto 0);
