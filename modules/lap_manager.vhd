@@ -21,7 +21,8 @@ entity lap_manager is
 end entity lap_manager;
 
 
-
+-- Pro sestavení architektury lap_manager bylo k inspiraci využito GEMINI. -- 
+    
 architecture Behavioral of lap_manager is
 
     
