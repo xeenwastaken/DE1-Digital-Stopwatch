@@ -1,6 +1,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+-- autor: Jakub Žalud // Zdroje: Cvičení DE1 - github.com/tomas-fryza/vhdl-examples
+
 entity clk_en is
     generic (
         G_MAX_100HZ : integer := 1000000;
