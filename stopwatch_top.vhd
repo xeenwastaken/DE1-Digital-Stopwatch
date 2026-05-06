@@ -1,12 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-
 entity stopwatch_top is
     generic (
         G_MAX_100HZ : integer := 1000000;  
         G_MAX_1KHZ  : integer := 100000;   
-        G_HOLD_TIME : integer := 2000      
+        G_HOLD_TIME : integer := 1250      
     );
     port (
         CLK100MHZ : in  std_logic;
@@ -15,18 +14,17 @@ entity stopwatch_top is
         BTND      : in  std_logic;
         BTNL      : in  std_logic;
         BTNR      : in  std_logic;
-        SEG       : out std_logic_vector(6 downto 0);  
+        SEG       : out std_logic_vector(6 downto 0);   
         DP        : out std_logic;                      
         AN        : out std_logic_vector(7 downto 0);   
         LED       : out std_logic_vector(15 downto 0)   
     );
 end entity stopwatch_top;
 
--- Při práci na stopwatch_top byla využito GEMINI pro pomoc se strukturou. --
 
 architecture Behavioral of stopwatch_top is
 
-    
+  
     signal sig_rst : std_logic := '0';
 
     
@@ -40,22 +38,22 @@ architecture Behavioral of stopwatch_top is
     signal sig_btnl_state, sig_btnl_press : std_logic;
     signal sig_btnr_state, sig_btnr_press : std_logic;
 
-   
+    
     signal sig_start_stop_tick : std_logic;
     signal sig_reset_tick      : std_logic;
 
     
+    signal sig_delete_tick     : std_logic;
+    signal sig_clear_all_tick  : std_logic;
+
     signal sig_bcd_data : std_logic_vector(23 downto 0);
 
-   
     signal sig_display_data : std_logic_vector(23 downto 0);
 
-   
     signal sig_lap_led : std_logic_vector(9 downto 0);
 
 begin
 
-   
     clk_en_inst : entity work.clk_en
         generic map (
             G_MAX_100HZ => G_MAX_100HZ,
@@ -68,7 +66,7 @@ begin
             ce_1khz  => sig_ce_1khz
         );
 
-    
+  
     deb_btnc : entity work.debounce
         port map (
             clk         => CLK100MHZ,
@@ -124,7 +122,7 @@ begin
             btn_release => open
         );
 
-   
+
     bd_btnc : entity work.button_decoder
         generic map ( G_HOLD_TIME => G_HOLD_TIME )
         port map (
@@ -135,7 +133,18 @@ begin
             hold_out => sig_reset_tick
         );
 
-    
+  
+    bd_btnl : entity work.button_decoder
+        generic map ( G_HOLD_TIME => G_HOLD_TIME )
+        port map (
+            clk      => CLK100MHZ,
+            ce       => sig_ce_1khz,
+            btn_in   => sig_btnl_state,
+            tick_out => sig_delete_tick,
+            hold_out => sig_clear_all_tick
+        );
+
+
     counter_inst : entity work.counter
         port map (
             clk        => CLK100MHZ,
@@ -145,7 +154,7 @@ begin
             bcd_data   => sig_bcd_data
         );
 
-   
+
     lap_mgr_inst : entity work.lap_manager
         generic map ( G_LAP_DEPTH => 10 )
         port map (
@@ -155,13 +164,14 @@ begin
             reset_tick       => sig_reset_tick,
             next_lap_tick    => sig_btnu_press,
             prev_lap_tick    => sig_btnd_press,
-            delete_lap_tick  => sig_btnr_press,
-            save_lap_tick    => sig_btnl_press,
+            delete_lap_tick  => sig_delete_tick,
+            clear_all_tick   => sig_clear_all_tick,
+            save_lap_tick    => sig_btnr_press,
             lap_led_status   => sig_lap_led,
             display_data_out => sig_display_data
         );
 
-
+  
     disp_inst : entity work.display_driver
         port map (
             clk     => CLK100MHZ,
@@ -173,7 +183,7 @@ begin
             an      => AN
         );
 
-   
+    
     LED(9 downto 0)   <= sig_lap_led;
     LED(15 downto 10) <= (others => '0');
 
