@@ -2,6 +2,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
+-- autor: Jakub Žalud // Zdroje: Cvičení DE1 - github.com/tomas-fryza/vhdl-examples
+
 entity display_driver is
     port (
         clk     : in  std_logic;
