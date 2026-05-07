@@ -118,3 +118,5 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 * **Video Demonstration:** [https://www.youtube.com/shorts/TZS5_5ajEPg]
 * **Project Poster:** [TBD - Link na PDF]
 * **Zdroje:** Přednášky a cvičení BPC-DE1 (VUT FEKT), referenční manuál k desce Nexys A7.
+
+https://www.youtube.com/shorts/TZS5_5ajEPg
