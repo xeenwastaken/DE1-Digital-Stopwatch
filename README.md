@@ -115,7 +115,7 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 | BRAM | 0 | 75 | 0.00 % |
 
 ## 8. Other Outputs
-* **Video Demonstration:** [![Video demonstartion](https://img.youtube.com/vi/TZS5_5ajEPg/maxresdefault.jpg)](https://www.youtube.com/shorts/TZS5_5ajEPg)
-* **Project Poster:** [![Project Poster](https://img.shields.io/badge/Project_Poster-PDF-red?style=for-the-badge&logo=adobeacrobatreader)](assets/STOPWATCH_POSTER.pdf)
+[![Video demonstartion](https://img.youtube.com/vi/TZS5_5ajEPg/maxresdefault.jpg)](https://www.youtube.com/shorts/TZS5_5ajEPg)
+[![Project Poster](https://img.shields.io/badge/Project_Poster-PDF-red?style=for-the-badge&logo=adobeacrobatreader)](assets/STOPWATCH_POSTER.pdf)
 * **Zdroje:** Přednášky a cvičení BPC-DE1 (VUT FEKT), referenční manuál k desce Nexys A7.
 
