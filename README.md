@@ -115,7 +115,7 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 | BRAM | *TBD* | 75 | *TBD* % |
 
 ## 8. Other Outputs
-* **Video Demonstration:** [https://www.youtube.com/shorts/TZS5_5ajEPg]
+* **Video Demonstration:** [![Video demonstartion](https://img.youtube.com/vi/TZS5_5ajEPg/maxresdefault.jpg)](https://www.youtube.com/shorts/TZS5_5ajEPg)
 * **Project Poster:** [TBD - Link na PDF]
 * **Zdroje:** Přednášky a cvičení BPC-DE1 (VUT FEKT), referenční manuál k desce Nexys A7.
 
