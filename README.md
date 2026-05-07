@@ -109,10 +109,10 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 
 | Resource | Utilization | Available | Utilization % |
 | :--- | :--- | :--- | :--- |
-| LUT | *TBD* | 32600 | *TBD* % |
-| FF | *TBD* | 65200 | *TBD* % |
-| IO | *TBD* | 210 | *TBD* % |
-| BRAM | *TBD* | 75 | *TBD* % |
+| LUT | 345 | 32600 | 1.06 % |
+| FF | 394 | 65200 | 0.60 % |
+| IO | 38 | 210 | 18.10 % |
+| BRAM | 0 | 75 | 0.00 % |
 
 ## 8. Other Outputs
 * **Video Demonstration:** [![Video demonstartion](https://img.youtube.com/vi/TZS5_5ajEPg/maxresdefault.jpg)](https://www.youtube.com/shorts/TZS5_5ajEPg)
