@@ -19,7 +19,7 @@ Systém využívá pět tlačítek na desce Nexys A7. Následující tabulka pop
 ## 3. System Architecture & Block Diagram
 Návrh je striktně modulární. Celý systém je rozdělen do specializovaných bloků (VHDL entit), které spolu komunikují přes definované sběrnice a řídicí signály.
 
-![Top Level Design](stopwatch_top_design.jpg)
+![Top Level Design](assets/stopwatch_top_design.jpg)
 
 ### Přehled jednotlivých modulů
 | Název modulu | Typ | Hlavní funkce a popis |
@@ -116,6 +116,6 @@ Komplexní test správy mezičasů. Simulace zachycuje uložení času do pamět
 
 ## 8. Other Outputs
 * **Video Demonstration:** [![Video demonstartion](https://img.youtube.com/vi/TZS5_5ajEPg/maxresdefault.jpg)](https://www.youtube.com/shorts/TZS5_5ajEPg)
-* **Project Poster:** [TBD - Link na PDF]
+* **Project Poster:** [![Project Poster](https://img.shields.io/badge/Project_Poster-PDF-red?style=for-the-badge&logo=adobeacrobatreader)](assets/STOPWATCH_POSTER.pdf)
 * **Zdroje:** Přednášky a cvičení BPC-DE1 (VUT FEKT), referenční manuál k desce Nexys A7.
 
